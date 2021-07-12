@@ -1,4 +1,3 @@
-
 from math import inf as infinity
 import math
 from random import choice
@@ -257,16 +256,18 @@ def IA_vez(comp_escolha, humano_escolha):
     #     y = choice([z for z in range(N)])
     # else:
     #     move = minimax(tabuleiro, profundidade, COMP)
+
     if profundidade == (N ** 2):
         x = choice([z for z in range(N)])
         y = choice([z for z in range(N)])
     else:
         if(profundidade < dificuldade):
-            move = minimax(tabuleiro, profundidade, COMP)
+            move = minimax(tabuleiro, profundidade, COMP)        
+            x, y = move[0], move[1]
         else:
-            move = minimax(tabuleiro, dificuldade, COMP)
-        
-    x, y = move[0], move[1]
+            x = choice([z for z in range(N)])
+            y = choice([z for z in range(N)])          
+                    
     exec_movimento(x, y, COMP)
     time.sleep(0.1)
 

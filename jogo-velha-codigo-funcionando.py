@@ -265,7 +265,7 @@ def IA_vez(comp_escolha, humano_escolha):
         pos = (x,y)      
         posicoes.append(pos)  
     else:
-        if(profundidade > 5):
+        if(profundidade < dificuldade):
             move = minimax(tabuleiro, profundidade, COMP)
             x, y = move[0], move[1]
             pos = (x,y)

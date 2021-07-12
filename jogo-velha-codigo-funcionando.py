@@ -17,6 +17,7 @@ tabuleiro = []
 N = 0
 dificuldade = 1
 estados_gerados_total = 0
+posicoes = []
 
 """
 Funcao para avaliacao heuristica do estado.
@@ -240,7 +241,7 @@ def IA_vez(comp_escolha, humano_escolha):
     :param (humano_escolha): HUMANO escolhe X ou O
     :return:
     """
-    global N, tabuleiro
+    global N, tabuleiro, posicoes
     # print(celulas_vazias(tabuleiro))
     #profundidade = int(math.log(len(celulas_vazias(tabuleiro)), 2))
     #profundidade = math.floor(math.log(len(celulas_vazias(tabuleiro))))
@@ -261,14 +262,29 @@ def IA_vez(comp_escolha, humano_escolha):
     if profundidade == (N ** 2):
         x = choice([z for z in range(N)])
         y = choice([z for z in range(N)])
+        pos = (x,y)      
+        posicoes.append(pos)  
     else:
-        if(profundidade < dificuldade):
-            move = minimax(tabuleiro, profundidade, COMP)        
+        if(profundidade > 5):
+            move = minimax(tabuleiro, profundidade, COMP)
             x, y = move[0], move[1]
+            pos = (x,y)
+
+            while pos in posicoes:
+                x = choice([z for z in range(N)])
+                y = choice([z for z in range(N)])   
+                pos = (x,y)    
+          
+            posicoes.append(pos)                
         else:
-            x = choice([z for z in range(N)])
-            y = choice([z for z in range(N)])          
-                    
+            while True:
+                x = choice([z for z in range(N)])
+                y = choice([z for z in range(N)])   
+                pos = (x,y)
+                if pos not in posicoes:
+                    posicoes.append(pos)
+                    break
+          
     exec_movimento(x, y, COMP)
     time.sleep(0.1)
 
@@ -300,12 +316,13 @@ def HUMANO_vez(comp_escolha, humano_escolha):
             xx = int(
                 input('Entre com a coordenada horizontal (1..' + str(N) + '): '))
             yy = int(input('Entre com a coordenada vertical (1..' + str(N) + '): '))
-            coord = [xx - 1, yy - 1]
-            tenta_movimento = exec_movimento(coord[0], coord[1], HUMANO)
-
+            coord = (xx - 1, yy - 1)
+            tenta_movimento = exec_movimento(coord[0], coord[1], HUMANO) if coord not in posicoes else False
+         
             if tenta_movimento == False:
                 print('Movimento Inválido')
-                movimento = -1
+                xx = -1; yy = -1
+            else: posicoes.append(coord)
         except KeyboardInterrupt:
             print('Tchau!')
             exit()
